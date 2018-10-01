@@ -4,29 +4,24 @@ class api extends Controller {
 
 	public function __construct() {
 	
-		$this->db = new Database();
-		$this->dbh = $this->db->connect(DB_NAME);
-		$this->auth = new \Delight\Auth\Auth($this->dbh);
-
 		parent::__construct();
 	}
 
 	public function login() {
 
-		$data = $this->model->getPostData();
-
-		$email = $data['email'];
-		$password = $data['password'];
-		// $username = $data['username'];
+		$postData = $this->model->getPostData();
 
 		// $email = 'arjun.kashyap1@yahoo.co.in';
 		// $password = 'test123';
 		// $username = 'arjunkashyap';
 
 		try {
-		    $this->auth->login($email, $password);
 
-		    echo('https://www.ias.ac.in/');
+		    $this->auth->login($postData['email'], $postData['password']);
+
+		    $this->model->loadSessionVariables($postData);
+
+		    echo($postData['returnUrl']);
 		}
 		catch (\Delight\Auth\InvalidEmailException $e) {
 		    
@@ -43,6 +38,81 @@ class api extends Controller {
 		catch (\Delight\Auth\TooManyRequestsException $e) {
 		    
 		    echo('too many requests');
+		}
+	}
+
+	public function initiateResetPassword() {
+
+		$postData = $this->model->getPostData();
+
+		try {
+		    $this->auth->forgotPassword($postData['email'], function ($selector, $token) {
+				
+				// Send mail		        
+		        echo (BASE_URL . 'user/getResetPassword?s=' . $selector . '&t=' . $token);
+		    });
+		}
+		catch (\Delight\Auth\InvalidEmailException $e) {
+		    echo ('invalid email address');
+		}
+		catch (\Delight\Auth\EmailNotVerifiedException $e) {
+		    echo ('email not verified');
+		}
+		catch (\Delight\Auth\ResetDisabledException $e) {
+		    echo ('password reset is disabled');
+		}
+		catch (\Delight\Auth\TooManyRequestsException $e) {
+		    echo ('too many requests');
+		}
+	}
+
+	public function confirmResetPasswordValidity() {
+
+		$getData = $this->model->getGETData();
+
+		try {
+		    $this->auth->canResetPasswordOrThrow($getData['s'], $getData['t']);
+
+		    echo SUCCESS_PHRASE;
+		}
+		catch (\Delight\Auth\InvalidSelectorTokenPairException $e) {
+		    echo ('invalid token');
+		}
+		catch (\Delight\Auth\TokenExpiredException $e) {
+		    echo ('token expired');
+		}
+		catch (\Delight\Auth\ResetDisabledException $e) {
+		    echo ('password reset is disabled');
+		}
+		catch (\Delight\Auth\TooManyRequestsException $e) {
+		    echo ('too many requests');
+		}
+	}
+
+	public function resetPassword() {
+
+		$postData = $this->model->getPostData();
+		if($postData['password'] != $postData['confirmPassword']) { echo "Passwords Don't Match"; return; }
+
+		try {
+		    $this->auth->resetPassword($postData['selector'], $postData['token'], $postData['password']);
+
+		    echo SUCCESS_PHRASE;
+		}
+		catch (\Delight\Auth\InvalidSelectorTokenPairException $e) {
+		    echo ('invalid token');
+		}
+		catch (\Delight\Auth\TokenExpiredException $e) {
+		    echo ('token expired');
+		}
+		catch (\Delight\Auth\ResetDisabledException $e) {
+		    echo ('password reset is disabled');
+		}
+		catch (\Delight\Auth\InvalidPasswordException $e) {
+		    echo ('invalid password');
+		}
+		catch (\Delight\Auth\TooManyRequestsException $e) {
+		    echo ('too many requests');
 		}
 	}
 
@@ -105,10 +175,15 @@ class api extends Controller {
 		}
 	}
 
-	public function logout() {
+	// public function logout() {
 
-		$this->auth->logOut();
-	}
+	// 	try {
+	// 	    $this->auth->logOutEverywhere();
+	// 	}
+	// 	catch (\Delight\Auth\NotLoggedInException $e) {
+	// 	    // not logged in
+	// 	}
+	// }
 
 	public function check() {
 

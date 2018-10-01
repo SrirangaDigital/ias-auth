@@ -6,6 +6,11 @@ class apiModel extends Model {
 
 		parent::__construct();
 	}
+
+	public function loadSessionVariables($data) {
+
+		// To be used later
+	}
 }
 
 ?>

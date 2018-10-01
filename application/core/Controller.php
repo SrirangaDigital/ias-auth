@@ -4,6 +4,9 @@ class Controller {
 
 	public function __construct() {
 
+		$this->db = new Database();
+		$this->dbh = $this->db->connect(DB_NAME);
+		$this->auth = new \Delight\Auth\Auth($this->dbh);
 	}
 
 	public function loadModel($model) {
