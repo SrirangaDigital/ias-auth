@@ -7,6 +7,11 @@ class user extends Controller {
 		parent::__construct();
 	}
 
+	public function testSession() {
+
+		var_dump($_SESSION);
+	}
+	
 	public function login($query = [], $type = '') {
 
 		$returnUrl = isset($query['returnUrl']) ? $query['returnUrl'] : DEFAULT_RETURN_URL;
