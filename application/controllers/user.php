@@ -16,26 +16,16 @@ class user extends Controller {
 
 		$returnUrl = isset($query['returnUrl']) ? $query['returnUrl'] : DEFAULT_RETURN_URL;
 
-		if($this->auth->isLoggedIn()){
-
-			$this->absoluteRedirect($returnUrl);
-		}
-
 		$data['type'] = $type;
 		$data['returnUrl'] = $returnUrl;
 		$this->view('user/login', $data);
 	}
 
-	public function logout() {
+	public function logout($query = []) {
 
-		try {
-		    $this->auth->logOutEverywhere();
-			$this->absoluteRedirect('https://google.com/');
-		}
-		catch (\Delight\Auth\NotLoggedInException $e) {
+		$data['returnUrl'] = isset($query['returnUrl']) ? $query['returnUrl'] : DEFAULT_RETURN_URL;
 
-		    echo 'Not logged in';
-		}
+		$this->view('user/logout', $data);
 	}
 
 	public function resetPassword() {

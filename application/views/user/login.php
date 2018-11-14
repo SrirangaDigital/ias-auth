@@ -1,4 +1,11 @@
-<script type="text/javascript"> $(document).ready(function() { $( "#loginForm" ).submit(submitLoginForm); }); </script>
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	$( "#loginForm" ).submit(submitLoginForm);
+});
+
+</script>
 
 <div class="container">
 	<div class="row justify-content-center">
@@ -6,10 +13,15 @@
 			<h3>Login</h3>
 			<div id="result" class="hide alert alert-danger">&nbsp;</div>
 			<form id="loginForm" method="POST">
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label for="exampleInputEmail1">Email address</label>
 					<input required type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
 					<small id="emailHelp" class="form-text text-muted">Use same email address registered with us.</small>
+				</div> -->
+				<div class="form-group">
+					<label for="exampleInputEmail1">Username</label>
+					<input required type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Enter username">
+					<small id="usernameHelp" class="form-text text-muted">Fellow username.</small>
 				</div>
 				<div class="form-group">
 					<label for="exampleInputPassword1">Password</label>
@@ -17,7 +29,7 @@
 					<small id="emailHelp" class="text-right form-text text-muted"><a href="<?=BASE_URL?>user/resetPassword">Forgot password?</a></small>
 				</div>
 				<input type="hidden" name="type" id="type" value="<?=$data['type']?>">
-				<input type="hidden" name="returnUrl" id="type" value="<?=$data['returnUrl']?>">
+				<input type="hidden" name="returnUrl" id="returnUrl" value="<?=$data['returnUrl']?>">
 				<button id="submit" type="submit" class="btn btn-primary">Submit</button>
 			</form>
 		</div>

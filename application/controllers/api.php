@@ -11,22 +11,23 @@ class api extends Controller {
 
 		$postData = $this->model->getPostData();
 
-		// $email = 'arjun.kashyap1@yahoo.co.in';
-		// $password = 'test123';
-		// $username = 'arjunkashyap';
-
 		try {
 
-		    $this->auth->login($postData['email'], $postData['password']);
+		    $this->auth->loginWithUsername($postData['username'], $postData['password']);
 
 		    $this->model->loadSessionVariables($postData);
 
+		    $postData['returnUrl'] = str_replace('username', $this->auth->getUsername(), $postData['returnUrl']);
 		    echo($postData['returnUrl']);
 		}
-		catch (\Delight\Auth\InvalidEmailException $e) {
+		catch (\Delight\Auth\UnknownUsernameException $e) {
 		    
-		    echo('wrong email address');
+		    echo('unknown username');
 		}
+		// catch (\Delight\Auth\InvalidEmailException $e) {
+		    
+		//     echo('wrong email address');
+		// }
 		catch (\Delight\Auth\InvalidPasswordException $e) {
 		    
 		    echo('wrong password');
@@ -116,34 +117,22 @@ class api extends Controller {
 		}
 	}
 
-	public function register() {
-
-		$email = 'arjun.kashyap@yahoo.co.in';
-		$password = 'test123';
-		$username = 'arjunkashyap';
+	public function registerAll() {
 
 		try {
-		    $userId = $this->auth->register($email, $password, $username, function ($selector, $token) {
-		        
-		        var_dump($selector);
-		        var_dump($token);
-		        // send `$selector` and `$token` to the user (e.g. via email)
-		    });
-
-		    var_dump($userId);
-		    // we have signed up a new user with the ID `$userId`
+		    $userId = $this->auth->admin()->createUserWithUniqueUsername($_POST['email'], $_POST['password'], $_POST['username']);
 		}
 		catch (\Delight\Auth\InvalidEmailException $e) {
-		    // invalid email address
+		    echo 'invalid email address';
 		}
 		catch (\Delight\Auth\InvalidPasswordException $e) {
-		    // invalid password
+		    echo 'invalid password';
 		}
 		catch (\Delight\Auth\UserAlreadyExistsException $e) {
-		    // user already exists
+		    echo 'user already exists';
 		}
-		catch (\Delight\Auth\TooManyRequestsException $e) {
-		    // too many requests
+		catch (\Delight\Auth\DuplicateUsernameException $e) {
+		    echo 'username not unique';
 		}
 	}
 
@@ -175,15 +164,20 @@ class api extends Controller {
 		}
 	}
 
-	// public function logout() {
+	public function logout() {
 
-	// 	try {
-	// 	    $this->auth->logOutEverywhere();
-	// 	}
-	// 	catch (\Delight\Auth\NotLoggedInException $e) {
-	// 	    // not logged in
-	// 	}
-	// }
+		echo 'trying';
+		try {
+		    $this->auth->logOutEverywhere();
+		    $this->auth->destroySession();
+
+		    echo 'Hello';
+		}
+		catch (\Delight\Auth\NotLoggedInException $e) {
+
+		    echo 'Not logged in';
+		}
+	}
 
 	public function check() {
 
