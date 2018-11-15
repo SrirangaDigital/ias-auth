@@ -3,6 +3,8 @@ RewriteEngine On
 
 RewriteBase /auth
 
+php_value session.cookie_domain localhost
+
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 
