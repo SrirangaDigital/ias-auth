@@ -10,7 +10,7 @@ $(document).ready(function() {
 <div class="container">
 	<div class="row justify-content-center">
 		<div class="col-md-6">
-			<h3>Login</h3>
+			<!-- <h3>Login</h3> -->
 			<div id="result" class="hide alert alert-danger">&nbsp;</div>
 			<form id="loginForm" method="POST">
 				<!-- <div class="form-group">
