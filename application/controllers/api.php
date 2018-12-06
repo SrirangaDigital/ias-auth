@@ -16,6 +16,7 @@ class api extends Controller {
 		    $this->auth->loginWithUsername($postData['username'], $postData['password']);
 
 		    $this->model->loadSessionVariables($postData);
+    		$_SESSION['auth_roles_assigned'] = $this->auth->getRoles();
 
 		    $postData['returnUrl'] = str_replace('username', $this->auth->getUsername(), $postData['returnUrl']);
 		    echo($postData['returnUrl']);
@@ -134,6 +135,41 @@ class api extends Controller {
 		catch (\Delight\Auth\DuplicateUsernameException $e) {
 		    echo 'username not unique';
 		}
+	}
+
+	public function createAdmin() {
+
+		$adminEmail = 'admin@ias.ac.in';
+
+		try {
+		    $userId = $this->auth->admin()->createUserWithUniqueUsername($adminEmail, 'xxx', 'admin');
+		}
+		catch (\Delight\Auth\InvalidEmailException $e) {
+		    echo 'invalid email address';
+		}
+		catch (\Delight\Auth\InvalidPasswordException $e) {
+		    echo 'invalid password';
+		}
+		catch (\Delight\Auth\UserAlreadyExistsException $e) {
+		    echo 'user already exists';
+		}
+		catch (\Delight\Auth\DuplicateUsernameException $e) {
+		    echo 'username not unique';
+		}
+
+		try {
+		    $this->auth->admin()->addRoleForUserByEmail($adminEmail, \Delight\Auth\Role::ADMIN);
+		}
+		catch (\Delight\Auth\InvalidEmailException $e) {
+		    die('Unknown email address');
+		}
+
+		// try {
+		//     $this->auth->admin()->deleteUserByEmail($adminEmail);
+		// }
+		// catch (\Delight\Auth\InvalidEmailException $e) {
+		//     die('Unknown email address');
+		// }
 	}
 
 	public function confirmEmail() {
