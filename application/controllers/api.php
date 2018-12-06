@@ -18,7 +18,6 @@ class api extends Controller {
 		    $this->model->loadSessionVariables($postData);
     		$_SESSION['auth_roles_assigned'] = $this->auth->getRoles();
 
-		    $postData['returnUrl'] = str_replace('username', $this->auth->getUsername(), $postData['returnUrl']);
 		    echo($postData['returnUrl']);
 		}
 		catch (\Delight\Auth\UnknownUsernameException $e) {
