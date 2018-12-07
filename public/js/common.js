@@ -18,16 +18,6 @@ function submitLoginForm(event){
 	});
 }
 
-function logout(returnUrl){
-
-	event.preventDefault();
-
-	$.post( base_url + "api/logout", function( data ) {
-	 	
-		window.top.location.href = returnUrl;
-	});
-}
-
 function submitPasswordResetForm(event){
 
 	event.preventDefault();

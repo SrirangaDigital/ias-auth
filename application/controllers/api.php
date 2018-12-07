@@ -201,12 +201,9 @@ class api extends Controller {
 
 	public function logout() {
 
-		echo 'trying';
 		try {
 		    $this->auth->logOutEverywhere();
 		    $this->auth->destroySession();
-
-		    echo 'Hello';
 		}
 		catch (\Delight\Auth\NotLoggedInException $e) {
 

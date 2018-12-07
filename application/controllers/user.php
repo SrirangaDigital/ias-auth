@@ -23,9 +23,18 @@ class user extends Controller {
 
 	public function logout($query = []) {
 
+		// Ideally this work should be done by the api, die to lack of inheritance, it is done here for now.
 		$data['returnUrl'] = isset($query['returnUrl']) ? $query['returnUrl'] : DEFAULT_RETURN_URL;
+		try {
+		    $this->auth->logOutEverywhere();
+		    $this->auth->destroySession();
+		}
+		catch (\Delight\Auth\NotLoggedInException $e) {
 
-		$this->view('user/logout', $data);
+		    echo 'Not logged in';
+		}
+
+		$this->absoluteRedirect($data['returnUrl']);
 	}
 
 	public function resetPassword() {
