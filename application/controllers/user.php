@@ -51,6 +51,11 @@ class user extends Controller {
 
 		$this->view('user/getResetPassword', $data);
 	}
+
+	public function changePassword() {
+
+		$this->view('user/changePassword');
+	}
 }
 
 ?>

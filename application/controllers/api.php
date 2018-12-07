@@ -245,6 +245,30 @@ class api extends Controller {
 
 		// var_dump($this->auth->admin()->getRolesForUserById('1'));
 	}
+
+	public function changePassword() {
+
+		$postData = $this->model->getPostData();
+
+		try {
+
+		    $this->auth->changePassword($postData['oldPassword'], $postData['newPassword']);
+
+		    echo SUCCESS_PHRASE;
+		}
+		catch (\Delight\Auth\NotLoggedInException $e) {
+		
+			echo('Not logged in');
+		}
+		catch (\Delight\Auth\InvalidPasswordException $e) {
+			
+			echo('Invalid password(s)');
+		}
+		catch (\Delight\Auth\TooManyRequestsException $e) {
+			
+			echo('Too many requests');
+		}
+	}
 }
 
 ?>

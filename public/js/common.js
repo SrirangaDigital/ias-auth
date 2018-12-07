@@ -57,3 +57,22 @@ function submitgetResetPasswordForm(event){
 		}
 	});
 }
+
+function submitPasswordChangeForm(event){
+
+	event.preventDefault();
+
+	$('#submit').html('<i class="fa fa-spinner fa-spin"></i>').prop('disabled', true);
+	
+	$.post( base_url + "api/changePassword", $('#passwordChangeForm').serialize(), function( data ) {
+	 
+		$('#submit').html('Submit').prop('disabled', false);
+		$( "#result" ).html( data ).removeClass( 'hide' );
+
+		if(data === success_phrase) {
+
+			$( "#result" ).html( 'Password successfully changed.' ).removeClass('alert-danger').addClass('alert-success');
+			$("#passwordChangeForm").hide();
+		}
+	});
+}
